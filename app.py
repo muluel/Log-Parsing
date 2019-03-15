@@ -1,16 +1,18 @@
 #!/usr/bin/env python
 import argparse
+from urllib.request import urlopen
+
 parser = argparse.ArgumentParser()
 parser.add_argument('-q','--question',help='Use one argument and keyword',type=int)
 args=parser.parse_args()
 
-f = open('access.log','r')
 ip_list=[] # Stores unique ip's.
 chrome_version_list=[] # Stores unique chrome versions.
 bot_path_list=[]
 status_code_list=[] # Stores unique status codes.
 
-for line in f: # loop for each access.
+for line in urlopen('http://igm.univ-mlv.fr/~cherrier/download/L1/access.log'): # loop for each access log.
+    line=line.decode()
     ip = line.split(' -')[0] # ip parsing
 
     if ip not in ip_list: # Adding each unique
@@ -52,10 +54,13 @@ elif args.question==3:
 
 elif args.question==4:
     # Prints each status codes and how many times exist.
-    for status_code in status_code_list:
-        f = open('access.log','r')
-        count=0
-        for line in f:
-            if status_code in line:
-                count+=1
-        print(int(status_code),count,'\n')
+    try:
+        for status_code in status_code_list:
+            count=0
+            for line in urlopen('http://igm.univ-mlv.fr/~cherrier/download/L1/access.log'):
+                line = line.decode()
+                if status_code in line:
+                    count+=1
+            print(int(status_code),count,'\n')
+    except(ValueError):
+        pass
