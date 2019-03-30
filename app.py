@@ -10,8 +10,9 @@ ip_list=[] # Stores unique ip's.
 chrome_version_list=[] # Stores unique chrome versions.
 bot_path_list=[]
 status_code_list=[] # Stores unique status codes.
+f= urlopen('http://igm.univ-mlv.fr/~cherrier/download/L1/access.log')
 
-for line in urlopen('http://igm.univ-mlv.fr/~cherrier/download/L1/access.log'): # loop for each access log.
+for line in f: # loop for each access log.
     line=line.decode()
     ip = line.split(' -')[0] # ip parsing
 
@@ -57,9 +58,10 @@ elif args.question==4:
     try:
         for status_code in status_code_list:
             count=0
-            for line in urlopen('http://igm.univ-mlv.fr/~cherrier/download/L1/access.log'):
+            f = urlopen('http://igm.univ-mlv.fr/~cherrier/download/L1/access.log')
+            for line in f:
                 line = line.decode()
-                if status_code in line:
+                if ' '+status_code+' ' in line:
                     count+=1
             print(int(status_code),count,'\n')
     except(ValueError):
