@@ -36,33 +36,37 @@ with urlopen('http://igm.univ-mlv.fr/~cherrier/download/L1/access.log') as f:
         status_code=line.rsplit('''" ''')[1].split(' ')[0]
         if status_code not in status_code_list:
             status_code_list.append(status_code)
+
+def status_code_counter(statuscode):
+    with urlopen('http://igm.univ-mlv.fr/~cherrier/download/L1/access.log') as f:
+        counter=0
+        for line in f:
+            line=line.decode()
+            if ' '+statuscode+' ' in line:
+                counter+=1
+        return print(f'{counter}')
         
-    if args.question== 1:
-        print(len(ip_list)) # Prints how many differnt ip access to site.
+if args.question== 1:
+    print(len(ip_list)) # Prints how many differnt ip access to site.
 
-    elif args.question==2:
-        # Prints highest and lowest chrome versions.
-        print('En Yuksek: {}\nEn Dusuk: {}'.format(max(chrome_version_list),min(chrome_version_list)))
+elif args.question==2:
+    # Prints highest and lowest chrome versions.
+    print('En Yuksek: {}\nEn Dusuk: {}'.format(max(chrome_version_list),min(chrome_version_list)))
 
-    elif args.question==3:
-        # Checks if paths exist.
-        if (len(bot_path_list)==0):
-            print('There is no path.')
-        # If exist then prints paths.
-        else:
-            for path in bot_path_list:
-                print(path,'\n')
+elif args.question==3:
+    # Checks if paths exist.
+    if (len(bot_path_list)==0):
+        print('There is no path.')
+    # If exist then prints paths.
+    else:
+        for path in bot_path_list:
+            print(path,'\n')
 
-    elif args.question==4:
-        # Prints each status codes and how many times exist.
-        try:
-            for status_code in status_code_list:
-                count=0
-                with urlopen('http://igm.univ-mlv.fr/~cherrier/download/L1/access.log') as f:
-                    for line in f:
-                        line = line.decode()
-                        if ' '+status_code+' ' in line:
-                            count+=1
-                    print(int(status_code),count,'\n')
-        except(ValueError):
-            pass
+elif args.question==4:
+    # Prints each status codes and how many times exist.
+    try:
+        for status_code in status_code_list:
+            print(f'{int(status_code)} ',end='')
+            status_code_counter(status_code)
+    except(ValueError):
+        pass
